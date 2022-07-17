@@ -43,22 +43,3 @@ async def main():
     target_url = "https://movie.naver.com/movie/point/af/list.naver?&page=1"
     html = await c.request(url=target_url)
     return html
-
-# Test
-if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    a_html = loop.run_until_complete(main())
-    t = a_html.xpath('//*[@id="old_content"]/table/tbody')[0]
-    a = t.findall('tr')
-    td = a[0].findall('td')
-
-    for idx, ll in enumerate(td):
-        if idx == 0:  # 글 번호
-            print(ll.text)
-        elif idx == 1:  # 제목
-            print(ll.find('a').text)  # 제목
-            print(ll.find('div').find('em').text)  # 평점
-            print(ll.xpath('text()')[3].strip())
-        elif idx == 2:  # 작성자 및 작성일
-            print(ll.find('a').text)  # 작성자
-            print(ll.xpath('text()')[0])  # 작성일
