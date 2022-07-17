@@ -7,7 +7,7 @@ logger = get_logger(__name__)
 crawler = Crawler()
 
 
-def fetch_one_page(url: str):
+def fetch_one_page(url: str) -> list:
     resp = crawler.request(url)
     if resp is None:
         raise ConnectionError
@@ -33,7 +33,7 @@ def fetch_one_page(url: str):
     return page_data
 
 
-def save_review_data(page_num: int):
+def save_review_data(page_num: int) -> None:
     base_url = 'https://movie.naver.com/movie/point/af/list.naver?&page={page_num}'
     header = ['idx', 'movie', 'score', 'content', 'writer', 'created_at']
     try:
@@ -47,7 +47,7 @@ def save_review_data(page_num: int):
     logger.info(f"{page_num} is Crawled Successfully")
 
 
-def main():
+def main() -> None:
     for page_num in range(1, 100):
         save_review_data(page_num=page_num)
 

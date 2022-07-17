@@ -9,7 +9,7 @@ loop = asyncio.get_event_loop()
 crawler = AsyncCrawler()
 
 
-async def fetch_one_page(url: str):
+async def fetch_one_page(url: str) -> list:
     html = await crawler.request_parsing(url)
 
     if html is None:
@@ -36,7 +36,7 @@ async def fetch_one_page(url: str):
     return page_data
 
 
-async def save_review_data(page_num: int):
+async def save_review_data(page_num: int) -> None:
     base_url = 'https://movie.naver.com/movie/point/af/list.naver?&page={page_num}'
     header = ['idx', 'movie', 'score', 'content', 'writer', 'created_at']
     try:
@@ -50,7 +50,7 @@ async def save_review_data(page_num: int):
     logger.info(f"{page_num} is Crawled Successfully")
 
 
-async def main():
+async def main() -> None:
     futures = [asyncio.ensure_future(save_review_data(page_num=page_num)) for page_num in range(1, 100)]
     await asyncio.gather(*futures)
 

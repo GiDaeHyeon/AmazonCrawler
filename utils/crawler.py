@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import aiohttp
 
 import requests
@@ -34,11 +33,11 @@ class Crawler:
             return None
         return resp
 
-    def parsing(self, resp: requests.Response):
+    def parsing(self, resp: requests.Response) -> str:
         return self.parser(resp.text)
 
 
-async def main():
+async def main() -> str:
     c = AsyncCrawler()
     target_url = "https://movie.naver.com/movie/point/af/list.naver?&page=1"
     html = await c.request(url=target_url)
