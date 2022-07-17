@@ -11,6 +11,10 @@ crawler = AsyncCrawler()
 
 async def fetch_one_page(url: str):
     html = await crawler.request_parsing(url)
+
+    if html is None:
+        raise ConnectionError
+
     table = html.xpath('//*[@id="old_content"]/table/tbody')[0]
     trs = table.findall('tr')
 
@@ -35,7 +39,10 @@ async def fetch_one_page(url: str):
 async def save_review_data(page_num: int):
     base_url = 'https://movie.naver.com/movie/point/af/list.naver?&page={page_num}'
     header = ['idx', 'movie', 'score', 'content', 'writer', 'created_at']
-    data = await fetch_one_page(base_url.format(page_num=page_num))
+    try:
+        data = await fetch_one_page(base_url.format(page_num=page_num))
+    except ConnectionError as E:
+        logger.warning(f'{page_num} is Not Crawled')
     with open(f'./data/{page_num}.csv', 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
